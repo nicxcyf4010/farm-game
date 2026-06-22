@@ -1,0 +1,47 @@
+/* 全局基础样式 */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #app {
+  height: 100%;
+  width: 100%;
+  font-family: -apple-system, "Microsoft YaHei", Arial, sans-serif;
+  background: #f4f8f1;
+  color: #333;
+  font-size: 14px;
+}
+
+button { cursor: pointer; font-family: inherit; }
+
+ul, ol { list-style: none; }
+
+.farm-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 100vh;
+}
+
+.panel {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+
+.btn {
+  border: none;
+  background: #67c23a;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.btn:hover { background: #5daf34; }
+.btn:disabled { background: #c8e6b0; cursor: not-allowed; }
+.btn.gray { background: #909399; }
+.btn.gray:hover { background: #82848a; }
+.btn.orange { background: #e6a23c; }
+.btn.orange:hover { background: #cf9236; }

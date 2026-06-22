@@ -1,0 +1,191 @@
+[
+  {
+    "id": 1,
+    "name": "白菜",
+    "icon": "baicai",
+    "growTime": 10,
+    "baseYield": 2,
+    "sellPrice": 5,
+    "category": "蔬菜",
+    "description": "最常见的叶菜之一,生长快,适合新手入门种植。",
+    "unlockLevel": 1,
+    "expValue": 5,
+    "waterNeed": 2,
+    "fertilizerNeed": 1,
+    "pestRisk": 10,
+    "season": ["春", "秋"],
+    "techBonus": {
+      "autoWater": false, "pestControl": false, "drone": false,
+      "soilSensor": false, "greenhouse": false, "smartIrrigation": false,
+      "yieldBoost": 0.1
+    }
+  },
+  {
+    "id": 2,
+    "name": "水稻",
+    "icon": "shuidao",
+    "growTime": 20,
+    "baseYield": 3,
+    "sellPrice": 10,
+    "category": "粮食",
+    "description": "我国主粮作物,需水量大,经济价值稳定。",
+    "unlockLevel": 1,
+    "expValue": 8,
+    "waterNeed": 4,
+    "fertilizerNeed": 2,
+    "pestRisk": 15,
+    "season": ["夏", "秋"],
+    "techBonus": {
+      "autoWater": false, "pestControl": false, "drone": false,
+      "soilSensor": false, "greenhouse": false, "smartIrrigation": false,
+      "yieldBoost": 0.1
+    }
+  },
+  {
+    "id": 3,
+    "name": "番茄",
+    "icon": "fanqie",
+    "growTime": 30,
+    "baseYield": 2,
+    "sellPrice": 15,
+    "category": "蔬菜",
+    "description": "茄科作物,需精细管理,单株收益高。",
+    "unlockLevel": 2,
+    "expValue": 12,
+    "waterNeed": 3,
+    "fertilizerNeed": 3,
+    "pestRisk": 25,
+    "season": ["夏", "秋"],
+    "techBonus": {
+      "autoWater": false, "pestControl": false, "drone": false,
+      "soilSensor": false, "greenhouse": false, "smartIrrigation": false,
+      "yieldBoost": 0.2
+    }
+  },
+  {
+    "id": 4,
+    "name": "黄瓜",
+    "icon": "huanggua",
+    "growTime": 25,
+    "baseYield": 3,
+    "sellPrice": 12,
+    "category": "蔬菜",
+    "description": "攀藤类蔬菜,管理简单,产量可观。",
+    "unlockLevel": 2,
+    "expValue": 10,
+    "waterNeed": 3,
+    "fertilizerNeed": 2,
+    "pestRisk": 20,
+    "season": ["夏", "秋"],
+    "techBonus": {
+      "autoWater": false, "pestControl": false, "drone": false,
+      "soilSensor": false, "greenhouse": false, "smartIrrigation": false,
+      "yieldBoost": 0.15
+    }
+  },
+  {
+    "id": 5,
+    "name": "玉米",
+    "icon": "yumi",
+    "growTime": 35,
+    "baseYield": 3,
+    "sellPrice": 14,
+    "category": "粮食",
+    "description": "高产粮食作物,适应性强,饲料原料主力。",
+    "unlockLevel": 2,
+    "expValue": 12,
+    "waterNeed": 3,
+    "fertilizerNeed": 3,
+    "pestRisk": 15,
+    "season": ["夏", "秋"],
+    "techBonus": {
+      "autoWater": false, "pestControl": false, "drone": false,
+      "soilSensor": false, "greenhouse": false, "smartIrrigation": false,
+      "yieldBoost": 0.15
+    }
+  },
+  {
+    "id": 6,
+    "name": "草莓",
+    "icon": "caomei",
+    "growTime": 40,
+    "baseYield": 3,
+    "sellPrice": 20,
+    "category": "水果",
+    "description": "高价值水果,需要精细水肥与防病管理。",
+    "unlockLevel": 3,
+    "expValue": 18,
+    "waterNeed": 4,
+    "fertilizerNeed": 3,
+    "pestRisk": 30,
+    "season": ["春", "秋"],
+    "techBonus": {
+      "autoWater": true, "pestControl": false, "drone": false,
+      "soilSensor": false, "greenhouse": true, "smartIrrigation": false,
+      "yieldBoost": 0.25
+    }
+  },
+  {
+    "id": 7,
+    "name": "茄子",
+    "icon": "qiezi",
+    "growTime": 45,
+    "baseYield": 3,
+    "sellPrice": 18,
+    "category": "蔬菜",
+    "description": "茄科高经济价值作物,需温控和肥水精细管理。",
+    "unlockLevel": 3,
+    "expValue": 18,
+    "waterNeed": 4,
+    "fertilizerNeed": 4,
+    "pestRisk": 28,
+    "season": ["夏", "秋"],
+    "techBonus": {
+      "autoWater": true, "pestControl": true, "drone": false,
+      "soilSensor": false, "greenhouse": false, "smartIrrigation": false,
+      "yieldBoost": 0.3
+    }
+  },
+  {
+    "id": 8,
+    "name": "辣椒",
+    "icon": "lajiao",
+    "growTime": 40,
+    "baseYield": 3,
+    "sellPrice": 22,
+    "category": "经济作物",
+    "description": "经济价值高的调味作物,对水肥敏感。",
+    "unlockLevel": 3,
+    "expValue": 20,
+    "waterNeed": 3,
+    "fertilizerNeed": 4,
+    "pestRisk": 25,
+    "season": ["夏", "秋"],
+    "techBonus": {
+      "autoWater": true, "pestControl": true, "drone": false,
+      "soilSensor": false, "greenhouse": false, "smartIrrigation": false,
+      "yieldBoost": 0.3
+    }
+  },
+  {
+    "id": 9,
+    "name": "南瓜",
+    "icon": "nangua",
+    "category": "蔬菜",
+    "description": "大型果实作物,生长周期长,单次收益高。",
+    "unlockLevel": 10,
+    "growTime": 80,
+    "baseYield": 3,
+    "sellPrice": 35,
+    "expValue": 40,
+    "waterNeed": 2,
+    "fertilizerNeed": 2,
+    "pestRisk": 15,
+    "season": ["夏", "秋"],
+    "techBonus": {
+      "autoWater": true, "pestControl": true, "drone": false,
+      "soilSensor": false, "greenhouse": false, "smartIrrigation": false,
+      "yieldBoost": 0.5
+    }
+  }
+]

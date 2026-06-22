@@ -1,0 +1,44 @@
+[
+  {
+    "id": "autoWater",
+    "name": "自动洒水器",
+    "desc": "免除浇水操作，waterNeed降为0",
+    "effect": { "waterNeed": 0 },
+    "unlockLevel": 3
+  },
+  {
+    "id": "pestControl",
+    "name": "病虫害智能监测仪",
+    "desc": "pestRisk降为0",
+    "effect": { "pestRisk": 0 },
+    "unlockLevel": 5
+  },
+  {
+    "id": "drone",
+    "name": "植保无人机",
+    "desc": "生长时间缩短25%",
+    "effect": { "growTimeMul": 0.75 },
+    "unlockLevel": 8
+  },
+  {
+    "id": "soilSensor",
+    "name": "土壤智能检测仪",
+    "desc": "fertilizerNeed减半",
+    "effect": { "fertilizerNeedMul": 0.5 },
+    "unlockLevel": 10
+  },
+  {
+    "id": "greenhouse",
+    "name": "温室大棚",
+    "desc": "突破季节限制，pestRisk微降",
+    "effect": { "ignoreSeason": true, "pestRiskAdd": -5 },
+    "unlockLevel": 13
+  },
+  {
+    "id": "smartIrrigation",
+    "name": "水肥一体化",
+    "desc": "同时减免waterNeed和fertilizerNeed，生长时间再缩短10%",
+    "effect": { "waterNeed": 0, "fertilizerNeed": 0, "growTimeMul": 0.9 },
+    "unlockLevel": 20
+  }
+]
