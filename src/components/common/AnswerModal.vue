@@ -2,17 +2,21 @@
   <el-dialog
     v-model="visible"
     :title="`Lv${targetLevel} 智慧农具考核`"
-    width="540px"
+    width="480px"
     :close-on-click-modal="false"
     :show-close="submitted"
+    custom-class="answer-dialog"
     @close="onClose"
   >
     <div v-if="!submitted" class="q-wrap">
       <div class="q-meta">
         <span>第 {{ idx + 1 }} / {{ list.length }} 题</span>
         <span class="topic-line">
-          <img :src="getTopicIcon(current.topic)" class="topic-ic" :alt="current.topic || ''"/>
-          主题: {{ current.topic }} · 难度 {{ current.difficulty }} · 经验 +{{ current.expReward }}
+          <span class="topic-tag">{{ current.topic || '综合' }}</span>
+          <span class="diff-tag" :class="diffClass(current.difficulty)">
+            {{ diffText(current.difficulty) }}
+          </span>
+          <span class="meta-exp">经验 +{{ current.expReward }}</span>
         </span>
       </div>
       <div class="q-title">
@@ -35,8 +39,8 @@
     </div>
 
     <div v-else class="r-wrap">
-      <p>本次答对 <b>{{ correctCount }}</b> / {{ list.length }} 题</p>
-      <p>正确率: <b>{{ rateText }}</b></p>
+      <p class="r-line">本次答对 <b>{{ correctCount }}</b> / {{ list.length }} 题</p>
+      <p class="r-line">正确率: <b>{{ rateText }}</b></p>
       <p v-if="passed" class="ok">
         🎉 通过!已解锁科技 <b>{{ techName }}</b>
         <span v-if="techReward">  →  {{ techName }}</span>
@@ -56,9 +60,9 @@
     </div>
 
     <template #footer>
-      <el-button v-if="!submitted" @click="onClose">取消</el-button>
-      <el-button v-if="!submitted" type="primary" @click="onSubmit">提交</el-button>
-      <el-button v-else type="primary" @click="onClose">知道了</el-button>
+      <el-button v-if="!submitted" @click="onClose" class="ghost-btn">取消</el-button>
+      <el-button v-if="!submitted" type="primary" @click="onSubmit" class="primary-action">提交</el-button>
+      <el-button v-else type="primary" @click="onClose" class="primary-action">知道了</el-button>
     </template>
   </el-dialog>
 </template>
@@ -85,6 +89,20 @@ const topicIconMap = {
 // AnswerModal.vue 在 src/components/common/,向上两级到 src/assets/icons/
 const getTopicIcon = (topicName) =>
   new URL(`../../assets/icons/${topicIconMap[topicName] || 'topic_water'}.png`, import.meta.url).href
+
+// 难度 -> 文案 / 样式
+function diffText(d) {
+  const v = Number(d) || 1
+  if (v >= 3) return '困难'
+  if (v >= 2) return '中等'
+  return '简单'
+}
+function diffClass(d) {
+  const v = Number(d) || 1
+  if (v >= 3) return 'diff-hard'
+  if (v >= 2) return 'diff-mid'
+  return 'diff-easy'
+}
 
 const props = defineProps({ modelValue: Boolean })
 const emit = defineEmits(['update:modelValue', 'passed'])
@@ -170,27 +188,195 @@ function onClose() {
 </script>
 
 <style scoped>
-.q-wrap, .r-wrap { font-size: 14px; }
-.q-meta { display: flex; justify-content: space-between; color: #666; margin-bottom: 8px; gap: 8px; flex-wrap: wrap; }
-.topic-line { display: inline-flex; align-items: center; }
+/* ===== 题卡 ===== */
+.q-wrap, .r-wrap { font-size: 14px; color: #3d3d3d; }
+
+.q-meta {
+  display: flex; justify-content: space-between; color: #7a7a7a;
+  margin-bottom: 10px; gap: 8px; flex-wrap: wrap;
+}
+.topic-line { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.meta-exp { font-size: 12px; color: #7a7a7a; }
+
+/* 主题标签(节水灌溉等) */
+.topic-tag {
+  display: inline-block;
+  border-radius: 8px;
+  padding: 2px 10px;
+  font-size: 12px;
+  background: #f0ebe3;
+  color: #7a7a7a;
+  transition: all 0.2s ease;
+}
+
+/* 难度标签(简单/中等/困难) */
+.diff-tag {
+  display: inline-block;
+  border-radius: 8px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.diff-easy { background: #eaf4eb; color: #4a7c59; }
+.diff-mid  { background: #fff3cd; color: #8a6d3b; }
+.diff-hard { background: #f8d7da; color: #b14a4a; }
+
+/* 题目文字 */
 .q-title {
-  font-weight: 500; margin-bottom: 12px; line-height: 1.5;
+  font-size: 15px;
+  font-weight: 600;
+  color: #3d3d3d;
+  line-height: 1.6;
+  margin-bottom: 10px;
   display: flex; align-items: flex-start; gap: 6px;
 }
-.q-opts { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+
+/* 选项区 */
+.q-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+/* 导航 */
 .q-nav { display: flex; gap: 8px; margin-top: 12px; }
+
+/* ===== 结果区 ===== */
 .r-wrap p { margin: 6px 0; }
-.r-wrap .ok { color: #000; font-weight: 500; }
-.r-wrap .fail { color: #000; }
-.wrong { margin-top: 12px; border-top: 1px solid #eee; padding-top: 8px; }
-.wt { font-weight: 500; margin-bottom: 6px; }
+.r-line { text-align: center; }
+.r-wrap .ok {
+  color: #4a7c59;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 12px;
+}
+.r-wrap .fail {
+  color: #b14a4a;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 12px;
+}
+
+/* 错题 */
+.wrong { margin-top: 12px; border-top: 1px solid #e8ddd0; padding-top: 8px; }
+.wt { font-weight: 600; margin-bottom: 6px; color: #3d3d3d; }
 .wrong-item { margin-bottom: 6px; }
 .wq {
   font-size: 13px;
   display: flex; align-items: flex-start; gap: 6px;
 }
-.wh { font-size: 12px; color: #888; margin-top: 2px; }
+.wh { font-size: 12px; color: #7a7a7a; margin-top: 2px; }
 
-/* 主题图标 */
-.topic-ic { width: 18px; height: 18px; margin-right: 4px; vertical-align: middle; flex-shrink: 0; }
+/* 主题图标(与 FarmGrid 内嵌弹窗保持一致) */
+.topic-ic {
+  width: 18px; height: 18px;
+  margin-right: 4px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* ===== 题目卡片化(给"做题区"整体卡片视觉) ===== */
+.q-wrap {
+  background: #fafaf5;
+  border: 1.5px solid #e8ddd0;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+}
+
+/* ===== 自定义按钮(主操作 / 取消) ===== */
+.primary-action {
+  border-radius: 20px !important;
+  padding: 8px 24px !important;
+  font-weight: 600 !important;
+  background: linear-gradient(135deg, #4a7c59, #6a9e7a) !important;
+  border: none !important;
+  color: #fff !important;
+  transition: all 0.2s ease;
+}
+.primary-action:hover { filter: brightness(1.1); }
+.primary-action:active { transform: scale(0.98); }
+
+.ghost-btn {
+  border-radius: 20px !important;
+  padding: 8px 24px !important;
+  font-weight: 600 !important;
+  border: 1.5px solid #d4c9b8 !important;
+  background: #fff !important;
+  color: #7a7a7a !important;
+  transition: all 0.2s ease;
+}
+.ghost-btn:hover { border-color: #4a7c59 !important; color: #4a7c59 !important; }
+
+/* ===== 选项(el-radio)自定义莫兰迪卡 ===== */
+.q-opts :deep(.el-radio) {
+  display: block;
+  margin: 4px 0;
+  padding: 8px 14px;
+  border: 1.5px solid #d4c9b8;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #555;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  white-space: normal;
+  height: auto;
+  line-height: 1.5;
+}
+.q-opts :deep(.el-radio):hover {
+  border-color: #4a7c59;
+  background: #f5faf5;
+}
+.q-opts :deep(.el-radio.is-checked) {
+  border-color: #4a7c59;
+  background: #eaf4eb;
+  color: #4a7c59;
+  font-weight: 600;
+  box-shadow: 0 0 0 2px rgba(74, 124, 89, 0.10);
+}
+.q-opts :deep(.el-radio__label) { padding-left: 6px; }
+.q-opts :deep(.el-radio__inner) { border-color: #c8b89a; }
+.q-opts :deep(.el-radio.is-checked .el-radio__inner) {
+  background: #4a7c59;
+  border-color: #4a7c59;
+}
+</style>
+
+<style>
+/* ===== 全局:弹窗外壳(header/body 圆角 + 描边) ===== */
+.answer-dialog {
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+  overflow: hidden;
+}
+.answer-dialog .el-dialog__header {
+  background: #f5f0e8;
+  border-bottom: 1.5px solid #d4c9b8;
+  padding: 14px 20px;
+  border-radius: 16px 16px 0 0;
+}
+.answer-dialog .el-dialog__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #3d3d3d;
+  line-height: 1.4;
+}
+.answer-dialog .el-dialog__body {
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 0 0 16px 16px;
+}
+.answer-dialog .el-dialog__footer {
+  padding: 12px 20px 16px;
+  background: #ffffff;
+  border-top: 1px solid #f0ebe3;
+  border-radius: 0 0 16px 16px;
+}
+.answer-dialog .el-dialog__headerbtn {
+  top: 14px;
+  right: 16px;
+}
 </style>
