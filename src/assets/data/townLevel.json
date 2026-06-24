@@ -11,7 +11,7 @@
     "unlockTechQuiz": null,
     "unlockDecor": ["土路", "木栅栏"],
     "yieldBonus": 1.0,
-    "description": "你回到祖辈的乡村，眼前是破旧的房屋和荒芜的田地。拿起木锄，从白菜和小麦开始，迈出振兴的第一步。"
+    "description": "刚回到阔别多年的家乡，眼前的景象让人心酸——田埂荒废、房屋斑驳，年轻人都走了，只剩下几位老人守着这片土地。村头王大爷摇着头说：\"娃儿，种地没出路的。\"你握紧拳头，看着手里仅有的木锄和几包白菜种子，暗下决心：既然回来了，就要干出个样子来！靠双手、靠汗水，让这片土地重新焕发生机。"
   },
   {
     "level": 2,
@@ -22,10 +22,15 @@
     "unlockCrops": [3],
     "unlockLand": 5,
     "unlockResidents": ["老农张伯"],
-    "unlockTechQuiz": null,
+    "unlockTechQuiz": {
+      "topic": "智慧农机",
+      "quizId": "quiz_2",
+      "techReward": "drone",
+      "techName": "灌溉无人机"
+    },
     "unlockDecor": ["石板路"],
     "yieldBonus": 1.0,
-    "description": "第一批作物收成不错！张伯是村里最老的农民，他愿意教你一些种植诀窍。"
+    "description": "第一批蔬菜运进城，被一抢而空！账本上的数字让村民们瞪大了眼睛。李婶主动找上门：\"后生，我家那亩地也交给你种吧！\"大家伙儿的积极性调动起来了，可你心里清楚——光靠人力效率太低了，除草浇水累得腰都直不起来。要想真正富起来，必须得上现代化农具！"
   },
   {
     "level": 3,
@@ -37,14 +42,14 @@
     "unlockLand": 6,
     "unlockResidents": [],
     "unlockTechQuiz": {
-      "topic": "节水灌溉",
-      "quizId": "quiz_1",
-      "techReward": "autoWater",
-      "techName": "小型自动洒水器"
+      "topic": "智慧农业",
+      "quizId": "quiz_3",
+      "techReward": "greenhouse",
+      "techName": "智能温室"
     },
     "unlockDecor": ["路灯", "小花坛"],
     "yieldBonus": 1.05,
-    "description": "小镇开始有了生机。通过知识答题，你解锁了自动洒水器，再也不用每天手动浇水了！"
+    "description": "当植保无人机嗡嗡起飞、智能温室自动调节温湿度时，整个村子沸腾了！曾经的贫困村，如今成了周边有名的\"智慧农业示范点\"。村民们的腰包鼓了，笑容多了，年轻人也陆续回乡创业。你站在田埂上，望着这片充满希望的田野，终于明白：科技兴农不是口号，而是让老乡们过上好日子的真本事。"
   },
   {
     "level": 4,
