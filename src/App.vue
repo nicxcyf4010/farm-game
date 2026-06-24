@@ -187,6 +187,28 @@
         <el-button type="primary" class="levelup-confirm" @click="onCloseLevelUp">继续冒险</el-button>
       </template>
     </el-dialog>
+
+    <!-- ===== 背景音乐控制按钮(纯文字版,固定右下角) ===== -->
+    <div class="music-control-wrapper">
+      <button
+        class="music-btn"
+        type="button"
+        :title="isMusicPlaying ? '关闭背景音乐' : '播放背景音乐'"
+        :aria-label="isMusicPlaying ? '关闭背景音乐' : '播放背景音乐'"
+        @click="toggleMusic"
+      >
+        {{ isMusicPlaying ? '🎵 轻音' : '🔇 静音' }}
+      </button>
+    </div>
+
+    <!-- ===== 背景音乐拦截/异常提示(淡彩国风毛玻璃,替代 alert) ===== -->
+    <transition name="custom-music-tip">
+      <div v-if="showMusicTip" class="custom-music-tip">
+        <p>{{ musicTipMsg }}</p>
+        <el-button type="primary" link size="small" @click="showMusicTip = false">知道了</el-button>
+      </div>
+    </transition>
+
   </div>
 </template>
 
@@ -200,6 +222,55 @@ import { clearAll } from './utils/storage.js'
 import { calcSellIncome, getLevelCfg, getNextLevelCfg, SEASONS, nextSeason } from './utils/game.js'
 import crops from './assets/data/cropList.json'
 import techTree from './assets/data/techTree.json'
+
+// ===== 背景音乐(public/bgm.mp3)=====
+const isMusicPlaying = ref(false)
+const audio = new Audio('/bgm.mp3')
+audio.loop = true
+audio.volume = 0.3
+audio.preload = 'auto'
+
+// 自定义淡彩国风提示(替代 alert)
+const showMusicTip = ref(false)
+const musicTipMsg = ref('')
+function notifyMusicTip(msg) {
+  musicTipMsg.value = msg
+  showMusicTip.value = true
+  // 4s 后自动隐藏,避免长期遮挡
+  setTimeout(() => { showMusicTip.value = false }, 4000)
+}
+
+function tryPlayAudio() {
+  if (isMusicPlaying.value) return
+  audio.play().then(() => {
+    isMusicPlaying.value = true
+  }).catch(() => {
+    // 浏览器自动播放策略可能阻止,首次用户交互时再触发
+    isMusicPlaying.value = false
+    notifyMusicTip('背景音乐被浏览器拦截啦,点一下屏幕就能听见田园的声音🌾')
+  })
+}
+function toggleMusic() {
+  if (isMusicPlaying.value) {
+    audio.pause()
+    isMusicPlaying.value = false
+  } else {
+    audio.play().then(() => {
+      isMusicPlaying.value = true
+    }).catch(() => {
+      isMusicPlaying.value = false
+      notifyMusicTip('背景音乐被浏览器拦截啦,点一下屏幕就能听见田园的声音🌾')
+    })
+  }
+}
+
+// 首次任意点击/键盘/触屏交互时,若被浏览器阻止,恢复播放
+function onFirstUserGesture() {
+  tryPlayAudio()
+  document.removeEventListener('click', onFirstUserGesture)
+  document.removeEventListener('keydown', onFirstUserGesture)
+  document.removeEventListener('touchstart', onFirstUserGesture)
+}
 
 // 统一图标工具
 const $ic = (n) => new URL(`./assets/icons/${n}.png`, import.meta.url).href
@@ -410,6 +481,12 @@ function onReset() {
 }
 
 onMounted(() => {
+  // 背景音乐:自动播放尝试 + 注册首次交互恢复
+  tryPlayAudio()
+  document.addEventListener('click', onFirstUserGesture)
+  document.addEventListener('keydown', onFirstUserGesture)
+  document.addEventListener('touchstart', onFirstUserGesture)
+
   loadStore()
   if (getLevelCfg(store.level)?.description) {
     shownLevelDescs.value.add(store.level)
@@ -427,7 +504,14 @@ onMounted(() => {
     }
   }, 1000)
 })
-onUnmounted(() => clearInterval(tickTimer))
+onUnmounted(() => {
+  clearInterval(tickTimer)
+  // 停止背景音乐,避免组件卸载后仍在后台播放
+  audio.pause()
+  document.removeEventListener('click', onFirstUserGesture)
+  document.removeEventListener('keydown', onFirstUserGesture)
+  document.removeEventListener('touchstart', onFirstUserGesture)
+})
 </script>
 
 <style scoped>
@@ -690,6 +774,46 @@ onUnmounted(() => clearInterval(tickTimer))
 .prog-row { display: flex; flex-direction: column; gap: 4px; }
 .prog-label { font-size: 12px; color: #7a7a7a; }
 
+/* ===== 进度条文字(深绿底上加粗白字+描边+阴影,提升对比度) ===== */
+.prog-row :deep(.el-progress__text),
+.prog-row :deep(.el-progress-bar__innerText) {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.4);
+  text-stroke: 0.5px rgba(0, 0, 0, 0.4);
+  paint-order: stroke fill;
+  transition: all 0.2s ease;
+}
+.prog-row :deep(.el-progress-bar__innerText text) {
+  fill: #ffffff !important;
+  stroke: rgba(46, 125, 50, 0.6) !important;
+  stroke-width: 0.5 !important;
+  font-weight: 700 !important;
+}
+
+/* ===== 进度条轨道背景(浅土色 #e8ddd0) ===== */
+.prog-row :deep(.el-progress-bar__outer) {
+  background-color: #e8ddd0 !important;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.prog-row :deep(.el-progress-bar__outerInner) {
+  background-color: #e8ddd0 !important;
+}
+
+/* ===== 兜底方案 B:深灰字 #2d2d2d + 浅绿条 #6a9e7a(若上面仍看不清) ===== */
+.prog-row.fallback :deep(.el-progress__text),
+.prog-row.fallback :deep(.el-progress-bar__innerText) {
+  color: #2d2d2d !important;
+  fill: #2d2d2d !important;
+  font-weight: 700 !important;
+}
+.prog-row.fallback :deep(.el-progress-bar__inner) {
+  background-color: #6a9e7a !important;
+}
+
 .tech-bottom { display: flex; justify-content: flex-end; margin-top: auto; }
 
 /* ===== 共用 ===== */
@@ -726,6 +850,82 @@ img[src*="assets/icons"] {
 }
 .levelup-confirm:hover { filter: brightness(1.1); }
 .levelup-confirm:active { transform: scale(0.98); }
+
+/* ===== 背景音乐控制按钮(纯文字 + 半透明小圆角) ===== */
+.music-control-wrapper {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+}
+.music-btn {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid #d4c9b8;
+  border-radius: 20px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #5a5a5a;
+  font-family: inherit;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.music-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  color: #4a7c59;
+  border-color: #4a7c59;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(74, 124, 89, 0.15);
+}
+.music-btn:active { transform: scale(0.97); }
+@media (max-width: 600px) {
+  .music-control-wrapper { bottom: 14px; right: 14px; }
+  .music-btn { font-size: 12px; padding: 5px 12px; }
+}
+
+/* ===== 音乐拦截提示(淡彩国风毛玻璃,替代浏览器 alert) ===== */
+.custom-music-tip {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  background: rgba(255, 250, 240, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(212, 201, 184, 0.6);
+  border-radius: 12px;
+  padding: 12px 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  min-width: 280px;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+}
+.custom-music-tip p {
+  margin: 0;
+  color: #5a5a5a;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.custom-music-tip-enter-active,
+.custom-music-tip-leave-active {
+  transition: all 0.3s ease;
+}
+.custom-music-tip-enter-from,
+.custom-music-tip-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-10px);
+}
 </style>
 
 <style>
@@ -754,5 +954,30 @@ img[src*="assets/icons"] {
   padding: 0 20px 16px;
   background: #ffffff;
   text-align: right;
+}
+
+/* ===== 全局兜底:进度条文字加粗白字+描边+阴影(深绿底上更清晰) ===== */
+.el-progress__text,
+.el-progress-bar__innerText,
+.el-progress-bar__innerText text {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.4);
+  text-stroke: 0.5px rgba(0, 0, 0, 0.4);
+  paint-order: stroke fill;
+  transition: all 0.2s ease;
+}
+.el-progress-bar__innerText text {
+  stroke: rgba(46, 125, 50, 0.6) !important;
+  stroke-width: 0.5 !important;
+}
+
+/* ===== 全局兜底:进度条轨道背景 #e8ddd0 ===== */
+.el-progress-bar__outer,
+.el-progress-bar__outerInner {
+  background-color: #e8ddd0 !important;
 }
 </style>
