@@ -3,9 +3,10 @@ import vue from '@vitejs/plugin-vue'
 
 // GitHub Pages 部署在子路径 /farm-game/ 下,
 // 所有静态资源(js / css / 静态图片)的引用会基于此 base 自动调整。
-// 同时通过 publicDir 把 public/ 目录原样拷贝(其中 /bgm.mp3 用绝对路径引用,与 base 无关)。
+// 同时通过 publicDir 把 public/ 目录原样拷贝(其中 /bgm.mp3 等走 BASE_URL 引用)。
 export default defineConfig({
-  // 部署到 https://<user>.github.io/farm-game/ 时必须设为 '/farm-game/'
+  // 部署到 https://nicxcyf4010.github.io/farm-game/ 时必须设为 '/farm-game/'
+  // 注意:base 必须以 / 开头并以 / 结尾,否则子路径下静态资源会 404 → 白屏
   base: '/farm-game/',
   plugins: [vue()],
   server: {
