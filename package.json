@@ -3,13 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://nicxcyf4010.github.io/farm-game",
+  "homepage": "https://nicxcyf4010.github.io/farm-game/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview"
   },
   "dependencies": {
     "element-plus": "^2.14.2",
@@ -17,7 +15,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.6",
-    "gh-pages": "^6.1.1",
     "vite": "^8.0.12"
   }
 }
