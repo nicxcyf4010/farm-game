@@ -225,7 +225,7 @@ import techTree from './assets/data/techTree.json'
 
 // ===== 背景音乐(public/bgm.mp3)=====
 const isMusicPlaying = ref(false)
-const audio = new Audio('/bgm.mp3')
+const audio = new Audio(`${import.meta.env.BASE_URL}bgm.mp3`)
 audio.loop = true
 audio.volume = 0.3
 audio.preload = 'auto'
