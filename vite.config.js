@@ -13,18 +13,11 @@ export default defineConfig({
     open: true
   },
   // 资源打包目录(GitHub Pages 默认即可)
+  // 备注:vite v8 默认打包器 rolldown 要求 manualChunks 必须是函数,本项目体量小,
+  //      不强制拆 chunk,若需拆分请改写为函数式 manualChunks(id) {...}
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    sourcemap: false,
-    // 拆分 chunk,降低首屏体积
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vue: ['vue'],
-          'element-plus': ['element-plus']
-        }
-      }
-    }
+    sourcemap: false
   }
 })
